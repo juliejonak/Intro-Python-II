@@ -55,15 +55,20 @@ def check_input(user_input):
         if user_input == word:
             output = 'Found'
     return output
-    
+
 # Make a new player object that is currently in the 'outside' room.
 
 player_start = input('Welcome player. What is your name? ')
 
 player = Player('outside', str(player_start))
-first_step = str(input(f'{player.name}, you are currently {player.cur_room}. You can move North, West, South or East throughout the game. Where would you like to go? '))
+
+print(f'Welcome {player.name}. You can quit at any time by typing "Q".')
+
+first_step = str(input(f'You are currently {player.cur_room}. You can move North, West, South or East throughout the game. Where would you like to go? '))
 
 search_input = check_input(first_step)
+
+# while selection != 'Q'
 
 if search_input == 'Found':
     print('good answer', first_step.upper())
@@ -77,6 +82,8 @@ if search_room == 'Found':
 else:
     print("OH NO")
 
+# Should movement between rooms be based on a series of methods on the player or room class, or should the possible moves be presented to the user (1. north, 2. south) for improved UI. Could store possible movements on each room and render via a loop.
+
 # move = str(input(f'{player.name}, you are currently {room[player.cur_room]['location']}. You can move North, West, South or East throughout the game. Where would you like to go? '))
 
 # if valid, then go into loop to move and check if valid for that room type
@@ -89,6 +96,7 @@ else:
 # ---> look up room in dictionary...?
 
 # * Prints the current description (the textwrap module might be useful here).
+# Text wrap Python docs: https://docs.python.org/2/library/textwrap.html
 # * Waits for user input and decides what to do.
 
 # If the user enters a cardinal direction, attempt to move to the room there.
