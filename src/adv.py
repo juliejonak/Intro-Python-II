@@ -4,20 +4,20 @@ from player import Player
 # Declare all the rooms
 
 room = {
-    'outside':  Room("Outside Cave Entrance",
+    'outside':  Room('outside', "outside the Cave Entrance",
                      "North of you, the cave mount beckons"),
 
-    'foyer':    Room("Foyer", """Dim light filters in from the south. Dusty
+    'foyer':    Room('foyer', "in the Foyer", """Dim light filters in from the south. Dusty
 passages run north and east."""),
 
-    'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
+    'overlook': Room('overlook', "at the Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
 the distance, but there is no way across the chasm."""),
 
-    'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
+    'narrow':   Room('narrow', "in a Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
 
-    'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
+    'treasure': Room('treasure', "in the Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
@@ -38,16 +38,8 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 
-# Make a new player object that is currently in the 'outside' room.
-
-player = input('Welcome player. What is your name? ')
-
-player_one = Player('outside', str(player))
-first_step = str(input(f'{player_one.name}, you are currently {player_one.cur_room}. You can move North, West, South or East throughout the game. Where would you like to go? '))
-
 valid_inputs = ['N', 'E', 'S', 'W', 'NORTH', 'EAST', 'SOUTH', 'WEST']
 
-# selection = ''
 
 def find_room(a_dict, key):
     output = 'Not found'
@@ -63,6 +55,13 @@ def check_input(user_input):
         if user_input == word:
             output = 'Found'
     return output
+    
+# Make a new player object that is currently in the 'outside' room.
+
+player_start = input('Welcome player. What is your name? ')
+
+player = Player('outside', str(player_start))
+first_step = str(input(f'{player.name}, you are currently {player.cur_room}. You can move North, West, South or East throughout the game. Where would you like to go? '))
 
 search_input = check_input(first_step)
 
@@ -71,15 +70,15 @@ if search_input == 'Found':
 else:
     print("Please enter a valid move, like 'n' or 'North' ")
 
-search_room = find_room(room, player_one.cur_room)
+search_room = find_room(room, player.cur_room)
 
 if search_room == 'Found':
-    print(room[player_one.cur_room]['name'])
+    print(room[player.cur_room]['location'])
 else:
     print("OH NO")
 
-# Type error and value error for improper inputs
-# to caps to simplify checking if valid input
+# move = str(input(f'{player.name}, you are currently {room[player.cur_room]['location']}. You can move North, West, South or East throughout the game. Where would you like to go? '))
+
 # if valid, then go into loop to move and check if valid for that room type
 
 
