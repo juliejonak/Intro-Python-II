@@ -4,22 +4,15 @@ from player import Player
 # Declare all the rooms
 
 room = {
-    'outside':  Room('outside', "outside the Cave Entrance",
-                     "North of you, the cave mount beckons"),
+    'outside':  Room('outside', "outside the Cave Entrance", "North of you, the cave mouth beckons"),
 
-    'foyer':    Room('foyer', "in the Foyer", """Dim light filters in from the south. Dusty
-passages run north and east."""),
+    'foyer':    Room('foyer', "in the Foyer", """Dim light filters in from the south. Dusty passages run north and east."""),
 
-    'overlook': Room('overlook', "at the Grand Overlook", """A steep cliff appears before you, falling
-into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+    'overlook': Room('overlook', "at the Grand Overlook", """A steep cliff appears before you, falling into the darkness. Ahead to the north, a light flickers in the distance, but there is no way across the chasm."""),
 
-    'narrow':   Room('narrow', "in a Narrow Passage", """The narrow passage bends here from west
-to north. The smell of gold permeates the air."""),
+    'narrow':   Room('narrow', "in a Narrow Passage", """The narrow passage bends here from west to north. The smell of gold permeates the air."""),
 
-    'treasure': Room('treasure', "in the Treasure Chamber", """You've found the long-lost treasure
-chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+    'treasure': Room('treasure', "in the Treasure Chamber", """You've found the long-lost treasure chamber! Sadly, it has already been completely emptied by earlier adventurers. The only exit is to the south."""),
 }
 
 
@@ -38,21 +31,10 @@ room['treasure'].s_to = room['narrow']
 # Main
 #
 
-valid_inputs = ['N', 'E', 'S', 'W', 'NORTH', 'EAST', 'SOUTH', 'WEST']
-
-
 def find_room(a_dict, key):
     output = 'Not found'
     for room in a_dict:
         if room == key:
-            output = 'Found'
-    return output
-
-def check_input(user_input):
-    output = 'Not found'
-    user_input = user_input.upper()
-    for word in valid_inputs:
-        if user_input == word:
             output = 'Found'
     return output
 
@@ -62,44 +44,40 @@ player_start = input('Welcome player. What is your name? ')
 
 player = Player('outside', str(player_start))
 
-print(f'Welcome {player.name}. You can quit at any time by typing "Q".')
+newline = '\n'
 
-first_step = str(input(f'You are currently {player.cur_room}. You can move North, West, South or East throughout the game. Where would you like to go? '))
+print(f'Welcome {player.name}. You can quit at any time by typing "Q". {newline} You can move throughout the game by typing North, West, South or East (N, W, S, E).')
 
-search_input = check_input(first_step)
+direction = ''
+while direction != 'Q':
 
-# while selection != 'Q'
+    direction = str(input(f'{newline} ** You are currently {room[player.cur_room].location}. ** {newline} {newline} {room[player.cur_room].description} {newline} {newline} Where would you like to go? ')).upper()
 
-if search_input == 'Found':
-    print('good answer', first_step.upper())
-else:
-    print("Please enter a valid move, like 'n' or 'North' ")
+    if direction in ('N', 'NORTH'):
+        if hasattr(room[player.cur_room], f'n_to'):
+            player.cur_room = room[player.cur_room].n_to.name
+        else:
+            print('You cannot move North from this room.')
+    elif direction in ('S', 'SOUTH'):
+        if hasattr(room[player.cur_room], f's_to'):
+            player.cur_room = room[player.cur_room].s_to.name
+        else:
+            print('You cannot move South from this room.')
+    elif direction in ('E', 'EAST'):
+        if hasattr(room[player.cur_room], f'e_to'):
+            player.cur_room = room[player.cur_room].e_to.name
+        else:
+            print('You cannot move East from this room.')
+    elif direction in ('W', 'WEST'):
+        if hasattr(room[player.cur_room], f'w_to'):
+            player.cur_room = room[player.cur_room].w_to.name
+        else:
+            print('You cannot move West from this room.')
 
-search_room = find_room(room, player.cur_room)
+    elif direction != 'Q':
+        print("Please enter a valid move, like 'n' or 'North' ")
 
-if search_room == 'Found':
-    print(room[player.cur_room]['location'])
-else:
-    print("OH NO")
-
-# Should movement between rooms be based on a series of methods on the player or room class, or should the possible moves be presented to the user (1. north, 2. south) for improved UI. Could store possible movements on each room and render via a loop.
-
-# move = str(input(f'{player.name}, you are currently {room[player.cur_room]['location']}. You can move North, West, South or East throughout the game. Where would you like to go? '))
-
-# if valid, then go into loop to move and check if valid for that room type
-
-
-# instead of referencing the string, reference the room stored on Player (but if the rooms change during the game, you'd only want to reference the key, in case the room value itself changes)
-
-# Write a loop that:
-# * Prints the current room name
-# ---> look up room in dictionary...?
+print(f'{newline} Thanks for playing! {newline}')
 
 # * Prints the current description (the textwrap module might be useful here).
 # Text wrap Python docs: https://docs.python.org/2/library/textwrap.html
-# * Waits for user input and decides what to do.
-
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
